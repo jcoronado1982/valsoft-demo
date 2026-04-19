@@ -113,6 +113,62 @@ import { CommonModule } from '@angular/common';
           </div>
         </section>
 
+        <!-- Database Architecture & Scaling Section -->
+        <section class="p-8 md:p-12 rounded-[2rem] bg-slate-50 border border-border">
+          <div class="max-w-4xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 text-xs font-bold tracking-wider uppercase mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+              Standardized Data Core
+            </div>
+            <h2 class="text-3xl font-bold text-[#042F59] mb-6">Database Architecture & Scaling</h2>
+            <p class="text-muted-foreground leading-relaxed mb-8">
+              We leverage **PostgreSQL 16+** as our primary source of truth, utilizing a hybrid methodology that combines the strictness of relational data with the flexibility of NoSQL.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="space-y-4">
+                <h4 class="font-bold text-[#042F59] flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                  Scaling to Millions of Records
+                </h4>
+                <p class="text-sm text-muted-foreground">
+                  Unlike traditional solutions that slow down with growth, our system uses **GIN (Generalized Inverted Index)**. This allows searches across millions of rows and deep within JSONB objects to stay under **~50ms**.
+                </p>
+              </div>
+
+              <div class="space-y-4">
+                <h4 class="font-bold text-[#042F59] flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                  Fuzzy Search (Trigrams)
+                </h4>
+                <p class="text-sm text-muted-foreground">
+                  Using `pg_trgm`, we implement similarity-based search. This handles spelling errors and partial matches without the performance penalty of `ILIKE` operations.
+                </p>
+              </div>
+
+              <div class="space-y-4">
+                <h4 class="font-bold text-[#042F59] flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                  JSONB Methodology
+                </h4>
+                <p class="text-sm text-muted-foreground">
+                  The `dynamic_attributes` column uses the binary JSON format (**JSONB**). This allows adding new product specifications (Color, Size, Material) on the fly without database migrations.
+                </p>
+              </div>
+
+              <div class="space-y-4">
+                <h4 class="font-bold text-[#042F59] flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                  Optimized Indexing
+                </h4>
+                <p class="text-sm text-muted-foreground">
+                  We use `jsonb_path_ops` for ultra-fast traversal of nested objects, prioritizing query speed for complex filtering in large-scale inventories.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- Getting Started Section -->
         <section>
           <div class="flex items-center gap-3 mb-8">
