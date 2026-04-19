@@ -21,13 +21,10 @@ import { CommonModule } from '@angular/common';
         </p>
       </section>
 
-      <!-- Main Content Grid -->
+      <!-- Main Content -->
       <div class="max-w-6xl mx-auto px-4 space-y-20">
         
-      <!-- Main Content Grid -->
-      <div class="max-w-6xl mx-auto px-4 space-y-20">
-        
-        <!-- Documentation Cards Grid -->
+        <!-- Platform Modules Grid -->
         <section>
           <div class="flex items-center gap-3 mb-8">
             <div class="p-2 rounded-lg bg-[#4187FF]/10 text-[#4187FF]">
@@ -57,7 +54,6 @@ import { CommonModule } from '@angular/common';
                  </p>
                </div>
             </div>
-
 
             <!-- Backend Card -->
             <div class="group flex flex-col p-8 rounded-3xl bg-white border border-border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
@@ -169,7 +165,7 @@ import { CommonModule } from '@angular/common';
           </div>
         </section>
 
-        <!-- Getting Started Section -->
+        <!-- Fast Deployment Section -->
         <section>
           <div class="flex items-center gap-3 mb-8">
             <div class="p-2 rounded-lg bg-[#4187FF]/10 text-[#4187FF]">
@@ -177,7 +173,24 @@ import { CommonModule } from '@angular/common';
             </div>
             <h2 class="text-2xl font-bold text-[#042F59]">Fast Deployment</h2>
           </div>
-
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="flex flex-col p-6 rounded-2xl bg-white border border-border shadow-sm hover:border-[#4187FF]/50 transition-colors">
+               <span class="text-xs font-bold text-[#4187FF] mb-2 uppercase">Step 01</span>
+               <h4 class="font-bold mb-2">Init Configuration</h4>
+               <p class="text-sm text-muted-foreground flex-grow">Run <code class="bg-muted px-1 rounded">./init-dev.sh</code> to create your local .env and appsettings files from the secure templates.</p>
+            </div>
+            <div class="flex flex-col p-6 rounded-2xl bg-white border border-border shadow-sm hover:border-[#4187FF]/50 transition-colors">
+               <span class="text-xs font-bold text-[#4187FF] mb-2 uppercase">Step 02</span>
+               <h4 class="font-bold mb-2">Automated Setup</h4>
+               <p class="text-sm text-muted-foreground flex-grow">Run <code class="bg-muted px-1 rounded">make setup</code> to install runtime environments for .NET, Python, and Angular dependencies.</p>
+            </div>
+            <div class="flex flex-col p-6 rounded-2xl bg-white border border-border shadow-sm hover:border-[#4187FF]/50 transition-colors">
+               <span class="text-xs font-bold text-[#4187FF] mb-2 uppercase">Step 03</span>
+               <h4 class="font-bold mb-2">Aspire Launch</h4>
+               <p class="text-sm text-muted-foreground flex-grow">Use <code class="bg-muted px-1 rounded">make dev</code> to start the .NET Aspire orchestrator and access the unified monitoring dashboard.</p>
+            </div>
+          </div>
+        </section>
 
         <!-- Tech Stack Details -->
         <section class="grid grid-cols-1 md:grid-cols-2 gap-12">
