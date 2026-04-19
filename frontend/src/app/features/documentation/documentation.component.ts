@@ -43,10 +43,21 @@ import { CommonModule } from '@angular/common';
                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
                </div>
                <h4 class="text-xl font-bold mb-3 text-[#042F59]">Frontend</h4>
-               <p class="text-sm text-muted-foreground leading-relaxed">
-                 Modern interface built with **Angular 21 (Zoneless)**. Uses **Signals** for reactive state management and **Spartan UI** for a high-end design system based on Tailwind CSS.
+               <p class="text-sm text-muted-foreground leading-relaxed mb-4">
+                 High-performance interface built with **Angular 21 (Zoneless)** and **Signals** via **@ngrx/signals**.
                </p>
+               <div class="space-y-2">
+                 <div class="flex items-center gap-2 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded w-fit">
+                   Testing: Vitest + Playwright
+                 </div>
+                 <p class="text-[11px] text-muted-foreground">
+                   **Unit Testing**: Fast execution with **Vitest** and AnalogJS. <br>
+                   **E2E Testing**: Robust browser automation with **Playwright**. <br>
+                   **UI Patterns**: **Spartan UI** and **Storybook 10** for component isolation.
+                 </p>
+               </div>
             </div>
+
 
             <!-- Backend Card -->
             <div class="group flex flex-col p-8 rounded-3xl bg-white border border-border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
