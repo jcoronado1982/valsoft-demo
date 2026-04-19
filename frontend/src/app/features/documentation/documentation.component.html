@@ -1,0 +1,52 @@
+<div class="max-w-7xl mx-auto p-8 bg-background text-foreground">
+  <header class="border-b-2 border-primary pb-8 mb-12">
+    <h1 class="text-[2rem] font-bold tracking-tight text-foreground">Documentation</h1>
+    <p class="text-muted-foreground mt-1 text-sm">Internal Technical Documentation: Architecture, Standards, and Data
+      Flow.</p>
+  </header>
+
+  <div class="flex gap-10">
+    <nav class="w-64 flex-shrink-0 space-y-1">
+      <p class="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4 px-1">Core Modules</p>
+      <div class="flex flex-col gap-1">
+        @for (section of sections(); track section.id) {
+        <button (click)="selectSection(section.id)" [class.bg-primary/10]="selectedSectionId() === section.id"
+          [class.text-primary]="selectedSectionId() === section.id"
+          class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-muted">
+          {{ section.title }}
+        </button>
+        }
+      </div>
+    </nav>
+
+    <div class="flex-1 space-y-8">
+      @if (activeSection(); as section) {
+      <section class="animate-in fade-in slide-in-from-bottom-2 duration-500">
+        <h2 class="text-2xl font-bold tracking-tight text-foreground mb-4 uppercase tracking-widest">{{ section.title }}
+        </h2>
+        <p class="text-muted-foreground leading-relaxed mb-6 font-medium">{{ section.description }}</p>
+
+        <div class="flex gap-2 mb-8">
+          @for (tag of section.tags; track tag) {
+          <span
+            class="px-3 py-1 bg-muted text-muted-foreground text-[10px] font-bold rounded-md border border-border uppercase tracking-widest">
+            {{ tag }}
+          </span>
+          }
+        </div>
+
+        @if (section.codeSnippet) {
+        <div class="bg-slate-900 rounded-2xl p-6 overflow-hidden border-2 border-primary/20">
+          <div class="flex items-center justify-between mb-4">
+            <span
+              class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">implementation_reference.ts</span>
+          </div>
+          <pre
+            class="text-sm font-mono text-blue-300 leading-relaxed overflow-x-auto"><code>{{ section.codeSnippet }}</code></pre>
+        </div>
+        }
+      </section>
+      }
+    </div>
+  </div>
+</div>
