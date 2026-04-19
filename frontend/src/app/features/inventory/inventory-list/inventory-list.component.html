@@ -1,0 +1,553 @@
+<div class="flex flex-col bg-background">
+  <!-- Header Area -->
+  <div class="p-4 pb-1">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+      <div>
+        <h1 class="text-[2rem] font-bold tracking-tight text-foreground">Inventory</h1>
+        <p class="text-muted-foreground mt-1 text-sm">Manage your stock, status and items details.</p>
+      </div>
+      @if (authService.user()?.role === 'admin') {
+      <button hlmBtn
+        [class]="'bg-white hover:bg-primary/5 text-foreground border-2 border-primary rounded-full px-8 h-10 transition-all font-bold text-xs uppercase tracking-widest shadow-sm flex items-center gap-2'"
+        (click)="startAdd()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14" />
+          <path d="M12 5v14" />
+        </svg>
+        Add New Item
+      </button>
+      }
+    </div>
+  </div>
+
+  <div class="flex gap-10 p-6 pt-2">
+    <!-- Sidebar Filters -->
+    <aside class="w-64 flex-shrink-0 hidden lg:flex flex-col gap-[10px] pt-[25px]">
+      @if (hasActiveFilters()) {
+      <div class="flex items-center justify-between pb-2">
+        <span class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Filters</span>
+        <button variant="ghost"
+          class="text-[10px] font-bold text-destructive hover:bg-destructive/10 px-2 py-1 rounded transition-colors uppercase tracking-widest"
+          (click)="clearFilters()">
+          Clear All
+        </button>
+      </div>
+      }
+
+
+      <!-- Categories Filter -->
+      <div class="space-y-1 border-b-2 border-primary pb-[10px]">
+        @if (categories().length > 0) {
+        <button (click)="toggleFilterExpansion('categories')"
+          class="flex items-center justify-between w-full px-1 text-sm font-semibold text-foreground uppercase tracking-wider hover:opacity-80 transition-colors">
+          Categories
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            class="transition-transform duration-200" [class.rotate-180]="expandedFilters()['categories']">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+        } @else {
+        <div
+          class="flex items-center justify-between w-full px-1 text-sm font-semibold text-foreground uppercase tracking-wider">
+          Categories
+        </div>
+        }
+
+        @if (expandedFilters()['categories'] || categories().length === 0) {
+        <div class="flex flex-col gap-1 mt-2 animate-in slide-in-from-top-1 duration-200">
+          @if (categories().length > 0) {
+          <button (click)="selectCategory(null)"
+            class="flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all group"
+            [class.bg-primary/10]="selectedCategoryId() === null" [class.text-primary]="selectedCategoryId() === null"
+            [class.hover:bg-muted]="selectedCategoryId() !== null">
+            <span class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="opacity-70">
+                <rect width="7" height="7" x="3" y="3" rx="1" />
+                <rect width="7" height="7" x="14" y="3" rx="1" />
+                <rect width="7" height="7" x="14" y="14" rx="1" />
+                <rect width="7" height="7" x="3" y="14" rx="1" />
+              </svg>
+              All Categories
+            </span>
+          </button>
+          }
+          @for (cat of categories(); track cat.id) {
+          <button (click)="selectCategory(cat.id)"
+            class="flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all group"
+            [class.bg-primary/10]="selectedCategoryId() === cat.id"
+            [class.text-primary]="selectedCategoryId() === cat.id"
+            [class.hover:bg-muted]="selectedCategoryId() !== cat.id">
+            <span class="truncate pr-2">{{ cat.name }}</span>
+          </button>
+          } @empty {
+          <div class="px-3 py-4 text-center">
+            <p class="text-xs text-muted-foreground italic">No categories found</p>
+          </div>
+          }
+        </div>
+        }
+      </div>
+
+      <!-- Dynamic Filters -->
+      @if (isFacetsLoading()) {
+      <div class="space-y-6 animate-pulse mt-6">
+        <div class="space-y-2 pb-4">
+          <div class="h-4 bg-muted/50 rounded w-1/2"></div>
+          <div class="h-8 bg-muted/30 rounded w-full mt-2"></div>
+          <div class="h-8 bg-muted/30 rounded w-full"></div>
+          <div class="h-8 bg-muted/30 rounded w-full"></div>
+        </div>
+        <div class="space-y-2 pb-4">
+          <div class="h-4 bg-muted/50 rounded w-1/2"></div>
+          <div class="h-8 bg-muted/30 rounded w-full mt-2"></div>
+          <div class="h-8 bg-muted/30 rounded w-full"></div>
+          <div class="h-8 bg-muted/30 rounded w-full"></div>
+        </div>
+      </div>
+      } @else {
+      @for (filter of dynamicFilters(); track filter.filterName) {
+      @if (filter.options.length > 1) {
+      <div class="space-y-1 border-b-2 border-primary pb-[10px]">
+        <button (click)="toggleFilterExpansion(filter.filterName)"
+          class="flex items-center justify-between w-full px-1 text-sm font-semibold text-foreground uppercase tracking-wider hover:opacity-80 transition-colors">
+          {{ filter.filterName }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            class="transition-transform duration-200" [class.rotate-180]="expandedFilters()[filter.filterName]">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+
+        @if (expandedFilters()[filter.filterName]) {
+        <div class="flex flex-col gap-1 mt-2 animate-in slide-in-from-top-1 duration-200">
+          <button (click)="toggleDynamicFilter(filter.filterName, null)"
+            class="flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all group"
+            [class.bg-primary/10]="!selectedDynamicFilters()[filter.filterName]"
+            [class.text-primary]="!selectedDynamicFilters()[filter.filterName]"
+            [class.hover:bg-muted]="selectedDynamicFilters()[filter.filterName]">
+            All {{ filter.filterName | titlecase }}
+          </button>
+
+          @for (option of filter.options.slice(0, expandedOptionsCount()[filter.filterName] || 5); track option.value) {
+          <button (click)="toggleDynamicFilter(filter.filterName, option.value)"
+            class="flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all group"
+            [class.bg-primary/10]="selectedDynamicFilters()[filter.filterName] === option.value"
+            [class.text-primary]="selectedDynamicFilters()[filter.filterName] === option.value"
+            [class.hover:bg-muted]="selectedDynamicFilters()[filter.filterName] !== option.value">
+            <span class="truncate pr-2">{{ option.value }}</span>
+            <span
+              class="bg-muted px-1.5 py-0.5 rounded text-[10px] text-muted-foreground group-hover:bg-background group-hover:text-foreground transition-colors"
+              [class.bg-primary/20]="selectedDynamicFilters()[filter.filterName] === option.value"
+              [class.text-primary]="selectedDynamicFilters()[filter.filterName] === option.value">
+              {{ option.itemCount }}
+            </span>
+          </button>
+          }
+
+          @if (filter.options.length > (expandedOptionsCount()[filter.filterName] || 5)) {
+          <button (click)="showMoreOptions(filter.filterName, filter.options.length)"
+            class="text-xs text-primary font-medium text-left px-3 py-1 hover:underline mt-1">
+            + Show {{ filter.options.length - (expandedOptionsCount()[filter.filterName] || 5) }} More
+          </button>
+          } @else if (filter.options.length > 5 && (expandedOptionsCount()[filter.filterName] || 5) ===
+          filter.options.length) {
+          <button (click)="showMoreOptions(filter.filterName, 5)"
+            class="text-xs text-primary font-medium text-left px-3 py-1 hover:underline mt-1">
+            - Show Less
+          </button>
+          }
+        </div>
+        }
+      </div>
+      }
+      }
+      }
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-w-0 bg-transparent">
+      <!-- Search Filter -->
+      <div class="py-4 px-0 bg-muted/5">
+        <div class="flex items-center gap-2 w-full">
+          <div class="relative group flex-1">
+            <svg
+              class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors"
+              xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input #searchInput hlmInput
+              [class]="'pl-10 w-full h-10 bg-muted/5 border-primary border-2 rounded-full shadow-sm focus:bg-background transition-all'"
+              placeholder="Search products..." [ngModel]="searchTerm()" (ngModelChange)="onSearch($event)"
+              (keyup.enter)="onSearchEnter($any($event.target).value)" />
+          </div>
+          <button hlmBtn
+            [class]="'bg-white hover:bg-primary/5 text-foreground border-2 border-primary rounded-full px-8 h-10 transition-all font-bold text-xs uppercase tracking-widest shadow-sm flex items-center gap-2'"
+            (click)="onSearchEnter(searchInput.value)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+            Search
+          </button>
+
+          @if (hasActiveFilters()) {
+          <button hlmBtn variant="ghost"
+            [class]="'text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-full px-6 h-10 transition-all font-bold text-xs uppercase tracking-widest flex items-center gap-2 shrink-0'"
+            (click)="clearFilters()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+            Clear Filters
+          </button>
+          }
+        </div>
+      </div>
+
+      <!-- Mercado Libre Style Selected Filter Chips -->
+      @if (activeFilterChips().length > 0) {
+      <div class="flex flex-wrap gap-2 pb-4">
+        @for (chip of activeFilterChips(); track chip.key) {
+        <button
+          class="flex items-center gap-2 bg-white border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-destructive/5 hover:border-destructive/30 transition-colors shadow-sm rounded-sm"
+          (click)="removeFilterChip(chip)">
+          <span class="capitalize">{{ chip.label }}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            class="text-muted-foreground">
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+        }
+      </div>
+      }
+
+      <!-- Items Table Wrapper -->
+      <div>
+        <app-data-table [data]="items()" [columns]="columns" variant="cards" [showIndex]="true" class="w-full">
+          <!-- Custom Template for Product Column -->
+          <ng-template appDataTableColumn="name" let-item>
+            <div class="flex flex-col">
+              <span class="font-semibold text-muted-foreground text-[14px] tracking-tight">{{ item.name }}</span>
+              <span class="text-[12px] text-muted-foreground font-mono opacity-70 uppercase tracking-widest mt-0.5">Ref:
+                #{{ item.id }}</span>
+            </div>
+          </ng-template>
+
+          <!-- Custom Template for Brand Column -->
+          <ng-template appDataTableColumn="brand" let-item>
+            <div class="flex flex-col items-center">
+              <span class="font-semibold text-muted-foreground text-[14px] tracking-tight text-center">
+                {{ item.brand || '—' }}
+              </span>
+            </div>
+          </ng-template>
+
+          <!-- Custom Template for Category Column -->
+          <ng-template appDataTableColumn="category" let-item>
+            <div class="flex flex-col items-center">
+              <span class="font-semibold text-muted-foreground text-[14px] tracking-tight text-center">
+                {{ item.category }}
+              </span>
+            </div>
+          </ng-template>
+
+          <!-- Custom Template for Price Column -->
+          <ng-template appDataTableColumn="price" let-item>
+            <div class="flex flex-col items-center gap-1">
+              <div class="flex items-center justify-center gap-1.5">
+                <span class="font-semibold text-muted-foreground text-[14px] tracking-tight">
+                  {{ item.price | currency:'USD':'symbol':'1.2-2' }}
+                </span>
+              </div>
+            </div>
+          </ng-template>
+
+          <!-- Custom Template for Quantity Column -->
+          <ng-template appDataTableColumn="stock" let-item>
+            <div class="flex flex-col items-center gap-1">
+              <div class="flex items-center justify-center gap-2">
+                <span class="font-semibold text-muted-foreground text-[14px] tracking-tight">{{ item.stock }}</span>
+              </div>
+            </div>
+          </ng-template>
+
+          <!-- Custom Template for Status Column -->
+          <ng-template appDataTableColumn="status" let-item>
+            <div class="flex items-center justify-center">
+              <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest"
+                [class.bg-green-100]="item.status === 'In Stock'"
+                [class.text-green-700]="item.status === 'In Stock'"
+                [class.bg-yellow-100]="item.status === 'Low Stock'"
+                [class.text-yellow-700]="item.status === 'Low Stock'"
+                [class.bg-red-100]="item.status === 'Discontinued' || item.status === 'Ordered'"
+                [class.text-red-700]="item.status === 'Discontinued' || item.status === 'Ordered'">
+                {{ item.status }}
+              </span>
+            </div>
+          </ng-template>
+
+          <!-- Custom Template for Actions Column -->
+          <ng-template appDataTableColumn="actions" let-item>
+            @if (authService.user()?.role === 'admin') {
+            <div class="flex justify-center gap-1">
+              <button (click)="startEdit(item)" hlmBtn variant="ghost" size="sm"
+                class="h-8 w-8 p-0 hover:bg-primary/10 hover:text-primary rounded-full transition-all" title="Edit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                  class="opacity-70">
+                  <path
+                    d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                  <path d="m15 5 4 4" />
+                </svg>
+              </button>
+              <button hlmBtn variant="ghost" size="sm"
+                class="h-8 w-8 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full transition-all"
+                (click)="deleteItem(item.id)" title="Delete">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                  class="opacity-70">
+                  <path d="M3 6h18" />
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                </svg>
+              </button>
+            </div>
+            }
+          </ng-template>
+
+          <!-- Custom Empty State -->
+          <div emptyState #emptyState class="flex flex-col items-center justify-center py-16 text-center w-full">
+            <p class="text-muted-foreground text-lg font-medium tracking-tight">No data found</p>
+          </div>
+        </app-data-table>
+      </div>
+
+      <!-- Pagination Footer -->
+      <div
+        class="px-0 py-6 border-t-2 border-primary flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
+        <div class="text-xs text-muted-foreground font-semibold order-2 sm:order-1 flex items-center gap-1">
+          @if (totalItems() > 0) {
+          <span>Showing</span>
+          <span class="text-foreground bg-primary/10 px-2 py-0.5 rounded-full">{{ (currentPage() - 1) * pageSize() + 1
+            }}</span>
+          <span>to</span>
+          <span class="text-foreground bg-primary/10 px-2 py-0.5 rounded-full">{{ Math.min(currentPage() * pageSize(),
+            totalItems()) }}</span>
+          <span>of</span>
+          <span class="text-foreground font-bold">{{ totalItems() }}</span>
+          <span>results</span>
+          } @else {
+          No results to display
+          }
+        </div>
+
+        <div class="flex items-center gap-3 order-1 sm:order-2">
+          <button [disabled]="currentPage() === 1"
+            (click)="changePage(currentPage() - 1)"
+            class="h-9 px-3 rounded-md border border-border bg-white hover:bg-muted text-foreground transition-all font-bold text-[11px] uppercase tracking-widest disabled:opacity-50 shadow-sm flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+            Previous
+          </button>
+
+          <div
+            class="flex items-center justify-center min-w-[36px] h-9 rounded-md bg-primary text-white text-sm font-bold shadow-sm">
+            {{ currentPage() }}
+          </div>
+
+          <button [disabled]="currentPage() * pageSize() >= totalItems()"
+            (click)="changePage(currentPage() + 1)"
+            class="h-9 px-3 rounded-md border border-border bg-white hover:bg-muted text-foreground transition-all font-bold text-[11px] uppercase tracking-widest disabled:opacity-50 shadow-sm flex items-center gap-1">
+            Next
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal Overlay -->
+@if (editingItem(); as item) {
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
+  <div
+    class="bg-card w-full max-w-2xl border border-border rounded-xl shadow-2xl p-6 space-y-6 animate-in zoom-in-95 duration-200">
+    <div class="flex justify-between items-start">
+      <div>
+        <h2 class="text-2xl font-bold tracking-tight text-foreground">Edit Product</h2>
+        <p class="text-xs text-muted-foreground mt-1">Update item details for inventory.</p>
+      </div>
+      <button (click)="editingItem.set(null)" class="text-muted-foreground hover:text-foreground transition-colors p-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="space-y-5">
+      <div class="space-y-2">
+        <label class="text-[10px] font-bold text-foreground/70 uppercase tracking-widest pl-1">Product Name</label>
+        <input hlmInput [(ngModel)]="editForm.name"
+          class="w-full bg-muted/5 border-primary border-2 rounded-xl focus:bg-background transition-all shadow-sm h-11"
+          placeholder="Enter name" />
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold text-foreground/70 uppercase tracking-widest pl-1">Price ($)</label>
+          <input hlmInput type="number" [(ngModel)]="editForm.price"
+            class="w-full bg-muted/5 border-primary border-2 rounded-xl focus:bg-background transition-all shadow-sm h-11"
+            min="0.01" step="0.01" />
+        </div>
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold text-foreground/70 uppercase tracking-widest pl-1">Stock</label>
+          <input hlmInput type="number" [(ngModel)]="editForm.stock"
+            class="w-full bg-muted/5 border-primary border-2 rounded-xl focus:bg-background transition-all shadow-sm h-11"
+            min="1" />
+        </div>
+      </div>
+      <div class="space-y-2">
+        <label class="text-[10px] font-bold text-foreground/70 uppercase tracking-widest pl-1">Status</label>
+        <select [(ngModel)]="editForm.status"
+          class="w-full bg-muted/5 border-primary border-2 rounded-xl focus:bg-background transition-all shadow-sm h-11 px-3 appearance-none font-medium">
+          <option value="In Stock">In Stock</option>
+          <option value="Low Stock">Low Stock</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="flex gap-3 pt-4">
+      <button type="button" hlmBtn
+        class="flex-1 bg-white hover:bg-primary/5 text-foreground border-2 border-primary rounded-full h-12 transition-all font-bold text-xs uppercase tracking-widest"
+        (click)="editingItem.set(null)">
+        Cancel
+      </button>
+      <button type="button" hlmBtn
+        class="flex-1 bg-primary hover:bg-primary/90 text-white rounded-full h-12 transition-all font-bold text-xs uppercase tracking-widest shadow-[0_4px_14px_0_rgba(65,135,255,0.39)]"
+        (click)="saveEdit()">
+        Save Changes
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Add Modal Overlay -->
+@if (isAdding()) {
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
+  <div
+    class="bg-card w-full max-w-2xl border border-border rounded-xl shadow-2xl p-6 space-y-6 animate-in zoom-in-95 duration-200">
+    <div class="flex justify-between items-start">
+      <div>
+        <h2 class="text-2xl font-bold tracking-tight text-foreground">Add New Item</h2>
+        <p class="text-xs text-muted-foreground mt-1 font-medium">The AI will extract categories and attributes
+          automatically.</p>
+      </div>
+      <button (click)="isAdding.set(false)" [disabled]="isProcessing()"
+        class="text-muted-foreground hover:text-foreground transition-colors p-1 disabled:opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </button>
+    </div>
+
+    @if (errorMessage()) {
+    <div
+      class="px-4 py-3 bg-red-50 border-2 border-red-200 rounded-xl text-red-600 text-xs font-bold animate-in fade-in slide-in-from-top-1">
+      <div class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" x2="12" y1="8" y2="12" />
+          <line x1="12" x2="12.01" y1="16" y2="16" />
+        </svg>
+        <span class="uppercase tracking-tight">{{ errorMessage() }}</span>
+      </div>
+    </div>
+    }
+
+    <form #addFormElement="ngForm" (ngSubmit)="saveAdd()" class="space-y-5">
+      <div class="space-y-2">
+        <label class="text-[10px] font-bold text-foreground/70 uppercase tracking-widest pl-1">
+          Product Description <span class="text-red-500 font-black">*</span>
+        </label>
+        <textarea hlmInput name="name" [(ngModel)]="addForm.name"
+          class="w-full min-h-[120px] bg-muted/5 border-primary border-2 rounded-xl focus:bg-background transition-all shadow-sm p-4 resize-none disabled:opacity-50 text-sm font-medium"
+          [disabled]="isProcessing()" required
+          placeholder="Example: SAMSUNG - Smart TV 4K 55 inch, OLED technology, black finish..."></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold text-foreground/70 uppercase tracking-widest pl-1">
+            Price ($) <span class="text-red-500 font-black">*</span>
+          </label>
+          <input hlmInput type="number" name="price" [(ngModel)]="addForm.price"
+            class="w-full bg-muted/5 border-primary border-2 rounded-xl focus:bg-background transition-all shadow-sm h-11"
+            [disabled]="isProcessing()" required min="0.01" step="0.01" />
+        </div>
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold text-foreground/70 uppercase tracking-widest pl-1">
+            Stock <span class="text-red-500 font-black">*</span>
+          </label>
+          <input hlmInput type="number" name="stock" [(ngModel)]="addForm.stock"
+            class="w-full bg-muted/5 border-primary border-2 rounded-xl focus:bg-background transition-all shadow-sm h-11"
+            [disabled]="isProcessing()" required min="1" />
+        </div>
+      </div>
+      <div class="space-y-2">
+        <label class="text-[10px] font-bold text-foreground/70 uppercase tracking-widest pl-1">Status</label>
+        <select name="status" [(ngModel)]="addForm.status"
+          class="w-full bg-muted/5 border-primary border-2 rounded-xl focus:bg-background transition-all shadow-sm h-11 px-3 appearance-none font-medium text-sm"
+          [disabled]="isProcessing()">
+          <option value="In Stock">In Stock</option>
+          <option value="Low Stock">Low Stock</option>
+        </select>
+      </div>
+
+      <div class="flex gap-3 pt-4">
+        <button type="button" hlmBtn
+          class="flex-1 bg-white hover:bg-primary/5 text-foreground border-2 border-primary rounded-full h-12 transition-all font-bold text-xs uppercase tracking-widest"
+          (click)="isAdding.set(false)" [disabled]="isProcessing()">
+          Cancel
+        </button>
+        <button type="submit" hlmBtn
+          class="flex-1 bg-primary hover:bg-primary/90 text-white rounded-full h-12 transition-all font-bold text-xs uppercase tracking-widest shadow-[0_4px_14px_0_rgba(65,135,255,0.39)]"
+          [disabled]="isProcessing() || addFormElement.invalid">
+          @if (isProcessing()) {
+          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
+          </svg>
+          Processing...
+          } @else {
+          Create Item
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}

@@ -1,0 +1,90 @@
+<div class="flex flex-col bg-background min-h-[500px] max-w-7xl mx-auto w-full">
+  <!-- Header Area -->
+  <div class="p-4 pb-1">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+      <div>
+        <h1 class="text-[2rem] font-bold tracking-tight text-foreground">Registered Users</h1>
+        <p class="text-muted-foreground mt-1 text-sm">Control system access and permissions for all registered members.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-6 pt-2">
+    <div class="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
+      <app-data-table [data]="users()" [columns]="columns" variant="cards" [showIndex]="true" class="w-full">
+        <!-- User Details Column -->
+        <ng-template appDataTableColumn="email" let-item>
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-full overflow-hidden border-2 border-primary/20 bg-muted flex-shrink-0">
+               @if (item.pictureUrl && !brokenImages().has(item.id)) {
+                <img [src]="item.pictureUrl" 
+                  alt="Avatar" 
+                  class="h-full w-full object-cover"
+                  (error)="handleImageError(item.id)">
+               } @else {
+                <div class="h-full w-full flex items-center justify-center text-primary font-bold bg-primary/5">
+                  {{ item.email.substring(0, 1).toUpperCase() }}
+                </div>
+               }
+            </div>
+            <div class="flex flex-col">
+              <span class="font-semibold text-foreground text-[16px] tracking-tight">{{ item.email }}</span>
+              <span class="text-[10px] text-muted-foreground font-mono uppercase tracking-widest mt-0.5">User ID: #{{ item.id }}</span>
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- Role Column -->
+        <ng-template appDataTableColumn="role" let-item>
+          <div class="flex justify-center">
+            <span 
+              class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest"
+              [ngClass]="item.role === 'admin' ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-muted text-muted-foreground border border-border'">
+              {{ item.role }}
+            </span>
+          </div>
+        </ng-template>
+
+        <!-- Joined Column -->
+        <ng-template appDataTableColumn="createdAt" let-item>
+          <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-foreground tracking-tight">{{ item.createdAt | date:'MMM dd, yyyy' }}</span>
+          </div>
+        </ng-template>
+
+        <!-- Actions Column -->
+        <ng-template appDataTableColumn="actions" let-item>
+          <div class="flex justify-center items-center gap-2">
+            <!-- Demo Mode: Allow anyone to change roles, including their own -->
+            <div class="flex items-center gap-2 bg-muted/30 p-1 rounded-xl border border-border">
+              <select #roleSelect 
+                class="h-8 rounded-lg bg-background border border-border px-2 text-[10px] font-bold uppercase tracking-widest focus:ring-1 focus:ring-primary outline-none cursor-pointer transition-all hover:border-primary/50">
+                <option value="admin" [selected]="item.role === 'admin'">Admin</option>
+                <option value="viewer" [selected]="item.role === 'viewer'">Viewer</option>
+              </select>
+              
+              <button hlmBtn
+                variant="outline"
+                class="rounded-lg h-8 px-4 text-[10px] font-black uppercase tracking-widest transition-all shadow-sm bg-primary text-primary-foreground hover:bg-primary/90 border-none"
+                (click)="updateRole(item, roleSelect)">
+                Save
+              </button>
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- Custom Empty State -->
+        <div emptyState #emptyState class="flex flex-col items-center justify-center py-24 text-center w-full">
+          @if (isLoading()) {
+            <div class="flex flex-col items-center gap-4">
+               <div class="h-10 w-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+               <p class="text-muted-foreground font-medium animate-pulse">Synchronizing users...</p>
+            </div>
+          } @else {
+            <p class="text-muted-foreground text-lg font-medium tracking-tight">No registered users found</p>
+          }
+        </div>
+      </app-data-table>
+    </div>
+  </div>
+</div>

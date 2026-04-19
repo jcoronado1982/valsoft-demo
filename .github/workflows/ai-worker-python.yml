@@ -1,0 +1,101 @@
+name: AI Worker Python CI
+
+on:
+  push:
+    branches: [ '**' ]
+    paths:
+      - 'ai-worker-python/**'
+      - 'proto/**'
+  pull_request:
+    branches: [ main, master, dev ]
+    paths:
+      - 'ai-worker-python/**'
+      - 'proto/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  id-token: write # Required for OIDC authentication in 2026
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ai-worker-python
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364ca9af683 # v4.2.2
+
+      - name: 🛡️ Security Scan (Secrets)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Set up Python
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.3.0
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install ruff mypy pytest pip-audit
+
+      - name: 🛡️ Security Scan (Vulnerable Dependencies)
+        run: pip-audit
+
+      - name: Lint with ruff
+        run: ruff check .
+
+      - name: Type check with mypy
+        run: mypy .
+
+      - name: Run Tests (pytest)
+        run: pytest
+
+      # 2026 CD Implementation
+      - name: Google Auth
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev')
+        uses: google-github-actions/auth@6fc934bc06abc2aeb48229adca9a1c92af4c0fc2 # v2.1.7
+        with:
+          workload_identity_provider: 'projects/977952175712/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'github-cd-invoice@launch-490115.iam.gserviceaccount.com'
+
+      - name: Set up Cloud SDK
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev')
+        uses: google-github-actions/setup-gcloud@6189d56e4096ee891640bb02ac264be37a2bb46c # v2.1.1
+
+      - name: Authorize Docker
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev')
+        run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet
+
+      - name: Build and Push to Artifact Registry
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev')
+        run: |
+          IMAGE_NAME=${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/invoice-repo/ai-worker-python:${{ github.sha }}
+          docker build -t $IMAGE_NAME -f ai-worker-python/Dockerfile .
+          docker push $IMAGE_NAME
+
+      - name: Deploy to Cloud Run
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev')
+        uses: google-github-actions/deploy-cloudrun@48e063c8da84196122d9cb3239e25d25e0e0f316 # v2.2.0
+        with:
+          service: ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'ai-worker-python' || 'ai-worker-python-dev' }}
+          region: ${{ secrets.GCP_REGION }}
+          image: ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/invoice-repo/ai-worker-python:${{ github.sha }}
+          env_vars: |
+            GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+            TAVILY_API_KEY=${{ secrets.TAVILY_API_KEY }}
+          flags: |
+             --min-instances=0
+             --max-instances=10
+             --memory=512Mi
+             --allow-unauthenticated

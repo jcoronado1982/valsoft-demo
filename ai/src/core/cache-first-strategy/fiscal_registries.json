@@ -1,0 +1,115 @@
+{
+  "_meta": {
+    "description": "Cache-First Strategy — Registros Fiscales y Mercantiles por País",
+    "version": "1.0.0",
+    "last_updated": "2026-03-16",
+    "notes": "fiscal = Autoridad tributaria (NIT, RUC, RIF, RFC). commercial = Registro mercantil / cámara de comercio (estado de matrícula). keywords = Términos de búsqueda para Tavily."
+  },
+  "default": {
+    "fiscal": "Autoridad Tributaria Nacional",
+    "commercial": "Registro Mercantil / Registro Público de Comercio",
+    "keywords": "registro mercantil autoridad tributaria empresa consulta estado"
+  },
+  "registries": {
+    "Colombia": {
+      "fiscal": "DIAN (Dirección de Impuestos y Aduanas Nacionales)",
+      "commercial": "Cámaras de Comercio, RUES (Registro Único Empresarial y Social)",
+      "keywords": "RUES registro mercantil cámara de comercio NIT DIAN estado matrícula"
+    },
+    "Perú": {
+      "fiscal": "SUNAT (Superintendencia Nacional de Aduanas y Administración Tributaria)",
+      "commercial": "SUNARP (Superintendencia Nacional de los Registros Públicos)",
+      "keywords": "SUNAT RUC consulta SUNARP registros públicos personas jurídicas"
+    },
+    "Chile": {
+      "fiscal": "SII (Servicio de Impuestos Internos)",
+      "commercial": "Registro de Empresas y Sociedades, Conservador de Bienes Raíces",
+      "keywords": "SII RUT registro de empresas y sociedades conservador comercio"
+    },
+    "Argentina": {
+      "fiscal": "AFIP (Administración Federal de Ingresos Públicos)",
+      "commercial": "IGJ (Inspección General de Justicia), Registro Público de Comercio",
+      "keywords": "AFIP CUIT inspección general de justicia registro público comercio"
+    },
+    "Ecuador": {
+      "fiscal": "SRI (Servicio de Rentas Internas)",
+      "commercial": "Superintendencia de Compañías, Valores y Seguros",
+      "keywords": "SRI RUC superintendencia de compañías registro mercantil consulta societaria"
+    },
+    "Bolivia": {
+      "fiscal": "SIN (Servicio de Impuestos Nacionales)",
+      "commercial": "SEPREC (Servicio Plurinacional de Registro de Comercio)",
+      "keywords": "SIN NIT SEPREC registro de comercio FUNDEMPRESA matrícula"
+    },
+    "Paraguay": {
+      "fiscal": "SET (Subsecretaría de Estado de Tributación)",
+      "commercial": "Registro Público del Poder Judicial",
+      "keywords": "SET RUC registro público poder judicial personas jurídicas Paraguay"
+    },
+    "Uruguay": {
+      "fiscal": "DGI (Dirección General Impositiva)",
+      "commercial": "Registro Nacional de Comercio",
+      "keywords": "DGI RUT registro nacional de comercio Uruguay empresa"
+    },
+    "Venezuela": {
+      "fiscal": "SENIAT (Servicio Nacional Integrado de Administración Aduanera y Tributaria)",
+      "commercial": "Registro Mercantil, SAREN",
+      "keywords": "SENIAT RIF registro mercantil SAREN consulta empresa Venezuela"
+    },
+    "Brasil": {
+      "fiscal": "Receita Federal (Secretaria da Receita Federal)",
+      "commercial": "Junta Comercial (JUCERJA, JUCESP), CNPJ",
+      "keywords": "Receita Federal CNPJ junta comercial registro empresa consulta"
+    },
+    "México": {
+      "fiscal": "SAT (Servicio de Administración Tributaria)",
+      "commercial": "Registro Público de Comercio (SIGER)",
+      "keywords": "SAT RFC registro público de comercio SIGER consulta empresa"
+    },
+    "Panamá": {
+      "fiscal": "DGI (Dirección General de Ingresos)",
+      "commercial": "Registro Público de Panamá, Panamá Emprende",
+      "keywords": "DGI RUC registro público Panamá aviso de operación empresa"
+    },
+    "Costa Rica": {
+      "fiscal": "Dirección General de Tributación",
+      "commercial": "Registro Nacional de Costa Rica, Registro de Personas Jurídicas",
+      "keywords": "registro nacional persona jurídica tributación cédula jurídica Costa Rica"
+    },
+    "Guatemala": {
+      "fiscal": "SAT (Superintendencia de Administración Tributaria)",
+      "commercial": "Registro Mercantil General de la República",
+      "keywords": "SAT NIT registro mercantil Guatemala consulta sociedad empresa"
+    },
+    "Honduras": {
+      "fiscal": "SAR (Servicio de Administración de Rentas)",
+      "commercial": "Registro Mercantil, Cámara de Comercio e Industrias",
+      "keywords": "SAR RTN registro mercantil cámara de comercio Honduras empresa"
+    },
+    "El Salvador": {
+      "fiscal": "DGII (Dirección General de Impuestos Internos)",
+      "commercial": "Centro Nacional de Registros (CNR), Registro de Comercio",
+      "keywords": "DGII NIT centro nacional de registros registro de comercio El Salvador"
+    },
+    "Nicaragua": {
+      "fiscal": "DGI (Dirección General de Ingresos)",
+      "commercial": "Registro Público Mercantil",
+      "keywords": "DGI RUC registro público mercantil Nicaragua empresa"
+    },
+    "República Dominicana": {
+      "fiscal": "DGII (Dirección General de Impuestos Internos)",
+      "commercial": "Cámara de Comercio y Producción, ONAPI",
+      "keywords": "DGII RNC cámara de comercio registro mercantil República Dominicana"
+    },
+    "Cuba": {
+      "fiscal": "ONAT (Oficina Nacional de Administración Tributaria)",
+      "commercial": "Registro Mercantil",
+      "keywords": "ONAT registro mercantil empresa estatal Cuba consulta"
+    },
+    "España": {
+      "fiscal": "AEAT (Agencia Estatal de Administración Tributaria)",
+      "commercial": "Registro Mercantil Central, BORME",
+      "keywords": "AEAT CIF registro mercantil central BORME consulta empresa España"
+    }
+  }
+}

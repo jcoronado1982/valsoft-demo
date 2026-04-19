@@ -1,0 +1,26 @@
+<div class="login-container">
+
+  <div class="brand-section">
+    <div class="brand-header">
+      <img src="/logo.svg" alt="Valsoft Logo" class="brand-logo">
+    </div>
+
+    <p class="login-tagline">Log in to continue</p>
+  </div>
+
+  <div class="auth-section">
+    <div [hidden]="loading()" id="googleBtn" class="google-btn"></div>
+
+    @if (loading()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Connecting...</p>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="error-message">⚠️ {{ error() }}</div>
+    }
+  </div>
+</div>
+
