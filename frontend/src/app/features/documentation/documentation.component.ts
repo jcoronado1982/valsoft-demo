@@ -24,69 +24,93 @@ import { CommonModule } from '@angular/common';
       <!-- Main Content Grid -->
       <div class="max-w-6xl mx-auto px-4 space-y-20">
         
-        <!-- Quick Start Section -->
+      <!-- Main Content Grid -->
+      <div class="max-w-6xl mx-auto px-4 space-y-20">
+        
+        <!-- Documentation Cards Grid -->
+        <section>
+          <div class="flex items-center gap-3 mb-8">
+            <div class="p-2 rounded-lg bg-[#4187FF]/10 text-[#4187FF]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-grid"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+            </div>
+            <h2 class="text-2xl font-bold text-[#042F59]">Platform Modules</h2>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Frontend Card -->
+            <div class="group flex flex-col p-8 rounded-3xl bg-white border border-border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+               <div class="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+               </div>
+               <h4 class="text-xl font-bold mb-3 text-[#042F59]">Frontend</h4>
+               <p class="text-sm text-muted-foreground leading-relaxed">
+                 Modern interface built with **Angular 21 (Zoneless)**. Uses **Signals** for reactive state management and **Spartan UI** for a high-end design system based on Tailwind CSS.
+               </p>
+            </div>
+
+            <!-- Backend Card -->
+            <div class="group flex flex-col p-8 rounded-3xl bg-white border border-border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+               <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-server"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
+               </div>
+               <h4 class="text-xl font-bold mb-3 text-[#042F59]">Backend</h4>
+               <p class="text-sm text-muted-foreground leading-relaxed">
+                 Robust **.NET 9** core using **Vertical Slices Architecture**. Implements Clean Architecture principles to decouple business logic from infrastructure using EF Core.
+               </p>
+            </div>
+
+            <!-- AI Card (Python Logo) -->
+            <div class="group flex flex-col p-8 rounded-3xl bg-gradient-to-br from-[#042F59] to-[#0a4a8c] text-white shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-white/10">
+               <div class="w-12 h-12 rounded-2xl bg-white/10 text-white flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform">
+                  <svg viewBox="0 0 448 512" class="w-6 h-6 fill-current">
+                    <path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.8 11-66.8 0-106.5zm-273.5 101.5c-13.3 0-24.1-10.8-24.1-24.1s10.8-24.1 24.1-24.1 24.1 10.8 24.1 24.1-10.8 24.1-24.1 24.1zM441.1 125.1c-15.6-32-35.1-51.4-74.4-51.4H240.7c-29.2 0-53.4 25-53.4 54.3v40.7h106.8v13.6H133.4c-31.1 0-42.6 21.7-53.4 54.2-11.2 33.8-11 66.8 0 106.5 7.7 30.9 22.3 54.2 53.4 54.2h40.1v-47.4c0-36.8 31.2-67.8 66.8-67.8h106.8c29.2 0 53.4-25 53.4-54.3V179.4c0-29-25.2-46-53.4-54.3-33.8-9.9-66.3-11.7-106.8 0-26.9 7.8-53.4 23.5-53.4 54.3v40.7h106.8v13.6H133.4c-31.1 0-42.6 21.7-53.4 54.2-11.2 33.8-11 66.8 0 106.5zm-54.2-225.8c-13.3 0-24.1-10.8-24.1-24.1s10.8-24.1 24.1-24.1 24.1 10.8 24.1 24.1-10.8 24.1-24.1 24.1z"/>
+                  </svg>
+               </div>
+               <h4 class="text-xl font-bold mb-3">AI (Python)</h4>
+               <p class="text-sm text-white/80 leading-relaxed">
+                 Advanced extractor built with **Python 3.13** and **gRPC**. Uses **Gemini 2.0 Flash Lite** for lightning-fast structured data extraction with sub-second response times.
+               </p>
+            </div>
+
+            <!-- Database Card -->
+            <div class="group flex flex-col p-8 rounded-3xl bg-white border border-border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+               <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+               </div>
+               <h4 class="text-xl font-bold mb-3 text-[#042F59]">Database</h4>
+               <p class="text-sm text-muted-foreground leading-relaxed">
+                 High-performance **PostgreSQL** storage leveraging **Full-Text Search (FTS)**, GIN indexes for JSONB, and Trigram similarity for typo-tolerant inventory searching.
+               </p>
+            </div>
+
+            <!-- Architecture Card -->
+            <div class="group flex flex-col p-8 rounded-3xl bg-white border border-border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+               <div class="w-12 h-12 rounded-2xl bg-green-500/10 text-green-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-git-graph"><path d="M5 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M5 6v12"/><path d="M5 18a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/><path d="M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M12 12v6"/><path d="M12 18a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/><path d="M19 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19 12v6"/><path d="M19 18a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/></svg>
+               </div>
+               <h4 class="text-xl font-bold mb-3 text-[#042F59]">Architecture</h4>
+               <p class="text-sm text-muted-foreground leading-relaxed">
+                 Distributed Monorepo orchestrated by **.NET Aspire**. Includes integrated **OpenTelemetry** for full observability and automated CI/CD via GitHub Actions.
+               </p>
+            </div>
+
+            <!-- Coming Soon Placeholder -->
+            <div class="flex flex-col p-8 rounded-3xl bg-muted/20 border border-dashed border-border items-center justify-center text-center">
+               <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Expansion</p>
+               <h4 class="text-lg font-semibold text-[#042F59]/50 italic">More sections coming soon</h4>
+            </div>
+          </div>
+        </section>
+
+        <!-- Getting Started Section -->
         <section>
           <div class="flex items-center gap-3 mb-8">
             <div class="p-2 rounded-lg bg-[#4187FF]/10 text-[#4187FF]">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rocket"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-5c1.62-2.2 5-3 5-3l1 1"/><path d="M12 15v5s3.03-.55 5-2c2.2-1.62 3-5 3-5l-1-1"/></svg>
             </div>
-            <h2 class="text-2xl font-bold text-[#042F59]">Getting Started</h2>
+            <h2 class="text-2xl font-bold text-[#042F59]">Fast Deployment</h2>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="flex flex-col p-6 rounded-2xl bg-white border border-border shadow-sm hover:border-[#4187FF]/50 transition-colors">
-               <span class="text-xs font-bold text-[#4187FF] mb-2 uppercase">Step 01</span>
-               <h4 class="font-bold mb-2">Init Configuration</h4>
-               <p class="text-sm text-muted-foreground flex-grow">Run <code class="bg-muted px-1 rounded">./init-dev.sh</code> to create your local .env and appsettings files from the secure templates.</p>
-            </div>
-            <div class="flex flex-col p-6 rounded-2xl bg-white border border-border shadow-sm hover:border-[#4187FF]/50 transition-colors">
-               <span class="text-xs font-bold text-[#4187FF] mb-2 uppercase">Step 02</span>
-               <h4 class="font-bold mb-2">Automated Setup</h4>
-               <p class="text-sm text-muted-foreground flex-grow">Run <code class="bg-muted px-1 rounded">make setup</code> to install runtime environments for .NET, Python, and Angular dependencies.</p>
-            </div>
-            <div class="flex flex-col p-6 rounded-2xl bg-white border border-border shadow-sm hover:border-[#4187FF]/50 transition-colors">
-               <span class="text-xs font-bold text-[#4187FF] mb-2 uppercase">Step 03</span>
-               <h4 class="font-bold mb-2">Aspire Launch</h4>
-               <p class="text-sm text-muted-foreground flex-grow">Use <code class="bg-muted px-1 rounded">make dev</code> to start the .NET Aspire orchestrator and access the unified monitoring dashboard.</p>
-            </div>
-          </div>
-        </section>
 
-        <!-- Python AI Microservice Section -->
-        <section class="relative overflow-hidden p-8 md:p-12 rounded-[2rem] bg-gradient-to-br from-[#042F59] to-[#0a4a8c] text-white">
-          <div class="relative z-10 flex flex-col md:flex-row items-center gap-12">
-            <div class="flex-grow space-y-6">
-              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/90 text-xs font-bold tracking-wider uppercase">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cpu"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
-                AI & Data Extraction microservice
-              </div>
-              <h2 class="text-3xl md:text-4xl font-bold">AI Microservice (Python)</h2>
-              <p class="text-white/80 leading-relaxed max-w-xl">
-                Our high-performance AI engine is built with **Python 3.13** and **gRPC**. It leverages **Google Gemini 2.0 Flash Lite** to perform structured data extraction with sub-second latency.
-              </p>
-              <ul class="space-y-3">
-                <li class="flex items-center gap-2 text-sm text-white/70">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-                  Communication via high-speed gRPC buffers.
-                </li>
-                <li class="flex items-center gap-2 text-sm text-white/70">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-                  Validated schemas using Pydantic and Instructor.
-                </li>
-              </ul>
-            </div>
-            
-            <!-- Python Logo Visual -->
-            <div class="flex-shrink-0 relative group">
-              <div class="absolute inset-0 bg-white/20 blur-3xl rounded-full group-hover:bg-white/30 transition-all duration-700"></div>
-              <div class="relative w-48 h-48 md:w-64 md:h-64 bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 flex items-center justify-center p-8 group-hover:scale-105 transition-transform duration-500">
-                <!-- Python SVG Logo -->
-                <svg viewBox="0 0 448 512" class="w-full h-full drop-shadow-2xl fill-white">
-                  <path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.8 11-66.8 0-106.5zm-273.5 101.5c-13.3 0-24.1-10.8-24.1-24.1s10.8-24.1 24.1-24.1 24.1 10.8 24.1 24.1-10.8 24.1-24.1 24.1zM441.1 125.1c-15.6-32-35.1-51.4-74.4-51.4H240.7c-29.2 0-53.4 25-53.4 54.3v40.7h106.8v13.6H133.4c-31.1 0-42.6 21.7-53.4 54.2-11.2 33.8-11 66.8 0 106.5 7.7 30.9 22.3 54.2 53.4 54.2h40.1v-47.4c0-36.8 31.2-67.8 66.8-67.8h106.8c29.2 0 53.4-25 53.4-54.3V179.4c0-29-25.2-46-53.4-54.3-33.8-9.9-66.3-11.7-106.8 0-26.9 7.8-53.4 23.5-53.4 54.3v40.7h106.8v13.6H133.4c-31.1 0-42.6 21.7-53.4 54.2-11.2 33.8-11 66.8 0 106.5zm-54.2-225.8c-13.3 0-24.1-10.8-24.1-24.1s10.8-24.1 24.1-24.1 24.1 10.8 24.1 24.1-10.8 24.1-24.1 24.1z"/>
-                </svg>
-              </div>
-            </div>
-          </div>
-        </section>
 
         <!-- Tech Stack Details -->
         <section class="grid grid-cols-1 md:grid-cols-2 gap-12">
