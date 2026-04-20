@@ -39,6 +39,7 @@ If you just cloned this repository, follow these steps to set up your local envi
 - **Docker Permission Denied**: Ensure your user is in the `docker` group: `sudo usermod -aG docker $USER`.
 - **Port 5092/4200 busy**: Run `make stop` to clear lingering processes.
 - **Database Connection**: Ensure the Docker container `inventory_db` is running via `docker ps`.
+- **Styles missing in Production**: If the site loads without styles on the live domain but works on localhost, check the `Content-Security-Policy` in `index.html`. It must allow `'unsafe-inline'` for `script-src` to support Angular's optimized CSS loading strategy.
 
 ## 📂 Project Structure
 

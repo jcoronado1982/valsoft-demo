@@ -62,6 +62,17 @@ ng e2e
 
 Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
+## 🚀 Production Deployment Notes
+
+### Content Security Policy (CSP)
+When building for production (`ng build`), Angular uses an async loading strategy for CSS to improve performance (First Contentful Paint). This involves setting `media="print"` and using an `onload` handler to switch to `media="all"`.
+
+For this to work, the **Content Security Policy** in `index.html` must include:
+- `script-src`: `'unsafe-inline'` (to allow the `onload` handler).
+- `style-src`: `'unsafe-inline'` (to allow Angular's critical CSS inlining).
+
+Failing to allow `'unsafe-inline'` for scripts will cause the production site to load without any styles (falling back to browser defaults), as the browser will block the media type switch.
+
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
