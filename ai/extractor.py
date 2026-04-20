@@ -16,9 +16,9 @@ def extraer_datos_producto(texto_crudo: str) -> ProductoExtraido:
         
     genai.configure(api_key=api_key)
     
-    # Usar gemini-2.0-flash para mejor extracción o el modelo configurado
+    # Usar gemini-2.5-flash-lite para mejor extracción y cuotas estables
     client = instructor.from_gemini(
-        client=genai.GenerativeModel("gemini-2.0-flash"),
+        client=genai.GenerativeModel("gemini-2.5-flash-lite"),
         mode=instructor.Mode.GEMINI_JSON,
     )
 

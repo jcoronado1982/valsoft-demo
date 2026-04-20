@@ -39,6 +39,7 @@ The backend runs in a Docker container using the `--network=host` mode.
      -e ConnectionStrings__inventorydb='...' \
      -e Jwt__Key='[32+ characters]' \
      -e Google__ClientId='...' \
+     -e services__ai__grpc__0=http://localhost:50051 \
      backend:latest
    ```
 

@@ -23,8 +23,14 @@
 - **Required Keys**: `GEMINI_API_KEY`, `TAVILY_API_KEY`.
 - **Do Not Ask**: Do not report missing keys without first verifying the existence of the `.env` file.
 
-## 🤖 Proactive Mandate
-You have access to `pip`, `venv`, and `python`. If you need to regenerate protos or reinstall dependencies, **do it yourself**. Do not ask for permission to execute technical commands that are already under your control.
+## 🌐 Network & Connectivity
+- **Container Networking**: In production (GCP VM), services run with `--network=host`. 
+- **Service Discovery**: Hostname resolution (e.g., `ai:50051`) fails in host mode. Always use `localhost:port` or `127.0.0.1:port` for inter-service gRPC communication.
+- **Troubleshooting**: If a "Name or service not known" error occurs, verify the `services__ai__grpc__0` environment variable is explicitly set to `http://localhost:50051`.
+
+## 🤖 Quota & Model Optimization
+- **Preferred Model**: Use `gemini-2.5-flash-lite` for high-throughput extraction tasks. 
+- **Reasoning**: It provides the best balance of latency and quota availability, preventing `429 Resource exhausted` errors seen with older models.
 
 ---
 > [!IMPORTANT]
