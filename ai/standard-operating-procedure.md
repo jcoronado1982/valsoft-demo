@@ -13,10 +13,49 @@
 3. **gRPC Protocol**: Based on `ai_service.proto`. Never modify gRPC logic without first updating the proto files.
 4. **Environment**: Dependency management via `requirements.txt` and isolated execution in `venv`.
 
-## 🧪 Testing and Quality
-- **Framework**: `pytest`.
-- **Execution**: `pytest` within the directory.
-- **Mocking**: Mocking external API calls (Gemini/Tavily) for CI/CD tests.
+## 🧪 Testing Stack & QA
+
+### A. Backend Layer (Core & Persistence)
+- **Location**: `backend/Inventory.API.IntegrationTests`
+- **Technology**: .NET 9 + xUnit + Testcontainers (Postgres 17).
+- **Purpose**: Validation of referential integrity, migrations, and Full-Text Search.
+- **Execution**:
+  ```bash
+  dotnet test backend/Inventory.API.IntegrationTests/Inventory.API.IntegrationTests.csproj
+  ```
+
+### B. Frontend Layer (UI & Logic)
+- **Location**: `frontend/` (specifically `*.spec.ts` files).
+- **Technology**: Vitest + JSDOM + Bun Runtime.
+- **Purpose**: Verification of Signals, zoneless components, and reactivity.
+- **Execution**:
+  ```bash
+  cd frontend && bun run test
+  ```
+
+### C. AI Layer (Intelligence Microservice)
+- **Location**: `ai/tests`
+- **Technology**: Pytest + gRPC + Instructor.
+- **Purpose**: Validation of generative models and multilingual data cleaning.
+- **Execution**:
+  ```bash
+  cd ai && pytest
+  ```
+
+---
+
+## 🔄 Execution Modes
+
+### Global Sequential Block
+To run all tests one after another (recommended for pre-deployment):
+```bash
+dotnet test backend/Inventory.API.IntegrationTests/Inventory.API.IntegrationTests.csproj && \
+(cd frontend && bun run test) && \
+(cd ai && pytest)
+```
+
+### Granular Execution
+You can run only specific modules by navigating to their respective directories and using the commands listed above.
 
 ## 🛰️ Secrets and Configuration
 - **Source of Truth**: Local `.env` file.

@@ -48,49 +48,23 @@ If you just cloned this repository, follow these steps to set up your local envi
 - **/ai**: AI Microservice (Python, gRPC).
 - **/infra**: Infrastructure, CI/CD and Governance ([infra/GOVERNANCE.md](infra/GOVERNANCE.md)).
 
-## 🧪 Testing & Validation
+### 🚀 Execution Strategy
 
-The platform includes a comprehensive testing suite across all layers, utilizing modern, high-performance tools.
+#### Individual Layer Execution
+- **Backend**: `dotnet test backend/Inventory.API.IntegrationTests/Inventory.API.IntegrationTests.csproj`
+- **Frontend**: `cd frontend && bun run test`
+- **AI**: `cd ai && pytest`
 
-### 🏛️ Backend Stack (Integration)
-Focused on data integrity, Full-Text Search (FTS) validation, and end-to-end API flows.
-- **Framework**: [xUnit](https://xunit.net/)
-- **Infrastructure**: [Testcontainers](https://testcontainers.com/) (provisioning real PostgreSQL/Docker instances for tests).
-- **Orchestration**: `WebApplicationFactory` (bootstraps the API in-memory).
-- **Assertions**: [FluentAssertions](https://fluentassertions.com/) (natural language validation).
-- **Mocking**: [NSubstitute](https://nsubstitute.github.io/).
-
-**Run Commands:**
+#### Full Sequential Block (CI/CD / Pre-flight)
+To ensure the entire ecosystem is stable, run the layers in sequence:
 ```bash
-# Run all backend tests
-dotnet test backend/Inventory.API.IntegrationTests/Inventory.API.IntegrationTests.csproj
+dotnet test backend/Inventory.API.IntegrationTests/Inventory.API.IntegrationTests.csproj && \
+(cd frontend && bun run test) && \
+(cd ai && pytest)
 ```
 
-### 🎨 Frontend Stack (Unit)
-Focused on high-speed UI logic validation using the Bun runtime.
-- **Runner**: [Vitest](https://vitest.dev/) (fast replacement for Karma).
-- **Environment**: [JSDOM](https://github.com/jsdom/jsdom) (browser simulation in Node/Bun).
-- **Integration**: `@analogjs/vitest-angular` (Angular support for Vitest).
-- **Runtime**: [Bun](https://bun.sh/) (ultra-fast test execution).
+---
 
-**Run Commands:**
-```bash
-# Run frontend tests
-cd frontend && bun run test
-```
-
-### 🤖 AI Service & Diagnostics
-- **Unit Testing**: `pytest` for AI logic.
-- **Diagnostic Script**: `ai/quick_test.py` to verify gRPC connectivity and Gemini API health.
-
-**Run Commands:**
-```bash
-# AI Unit tests
-cd ai && pytest
-
-# Quick Connection Diagnostic
-cd ai && python quick_test.py
-```
 
 ## 🧠 AI Agent Interoperability (MCP)
 

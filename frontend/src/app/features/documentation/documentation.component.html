@@ -36,13 +36,56 @@
         </div>
 
         @if (section.codeSnippet) {
-        <div class="bg-slate-900 rounded-2xl p-6 overflow-hidden border-2 border-primary/20">
+        <div class="group relative bg-slate-900 rounded-2xl p-6 overflow-hidden border-2 border-primary/20 mb-8">
           <div class="flex items-center justify-between mb-4">
             <span
               class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">implementation_reference.ts</span>
+            <button 
+              (click)="copyToClipboard(section.codeSnippet)"
+              class="p-1.5 rounded-md bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 transition-all hover:bg-primary/20 hover:text-primary active:scale-95"
+              title="Copy code">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            </button>
           </div>
           <pre
             class="text-sm font-mono text-blue-300 leading-relaxed overflow-x-auto"><code>{{ section.codeSnippet }}</code></pre>
+        </div>
+        }
+
+        @if (section.testingCommand) {
+        <div class="bg-primary/5 rounded-2xl p-6 border border-primary/20 animate-in fade-in zoom-in duration-700">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🧪</span>
+              <h3 class="text-sm font-bold uppercase tracking-widest text-primary">Testing & Validation</h3>
+            </div>
+            <div class="flex gap-2">
+              @for (tag of section.testingTags; track tag) {
+              <span class="px-2 py-0.5 bg-primary/10 text-primary text-[9px] font-bold rounded border border-primary/20 uppercase tracking-widest">
+                {{ tag }}
+              </span>
+              }
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Location</p>
+              <p class="text-sm font-mono text-foreground">{{ section.testingLocation }}</p>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Execution Command</p>
+              <div class="group relative bg-background/50 rounded-lg p-3 border border-border overflow-hidden">
+                <code class="text-xs text-primary font-mono whitespace-pre-wrap break-all block pr-8">{{ section.testingCommand }}</code>
+                <button 
+                  (click)="copyToClipboard(section.testingCommand!)"
+                  class="absolute top-2 right-2 p-1.5 rounded-md bg-muted text-muted-foreground opacity-0 group-hover:opacity-100 transition-all hover:bg-primary/10 hover:text-primary active:scale-95"
+                  title="Copy command">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
         }
       </section>
