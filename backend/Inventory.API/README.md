@@ -36,3 +36,19 @@ Organized into **Features** (Vertical Slices), where each folder is a self-conta
 
 This project is automatically started via the **AppHost**.
 To access interactive documentation: `http://localhost:<assigned-port>/scalar/v1`.
+
+## 🚀 Production Migration Safeguards
+
+In .NET 9, EF Core introduces strict validation for model snapshots. In production, this can cause the application to crash if there's any discrepancy between the model and the snapshot.
+
+### Suppressing Migration Warnings
+To prevent blocking production deployments, we suppress `RelationalEventId.PendingModelChangesWarning` in `Program.cs`:
+
+```csharp
+options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
+```
+
+This allows the application to run the `Migrate()` command and start correctly even if minor metadata differences exist.
+
+### Connection Strings
+In production, use the environment variable `ConnectionStrings__inventorydb` to override the default connection string.

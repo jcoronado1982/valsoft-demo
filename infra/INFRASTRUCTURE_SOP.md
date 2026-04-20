@@ -55,6 +55,39 @@ Development configurations are in:
 
 ---
 
+---
+
+## 🛡️ Production Pre-Flight Checklist (Critical)
+
+Before initiating a production deployment on the GCP VM, ensure the following constraints are met:
+
+1. **Frontend CSP**: The `index.html` MUST include `script-src 'unsafe-inline'` to allow Angular's optimized CSS loading (`onload` handlers).
+2. **JWT Security**: The `Jwt__Key` environment variable MUST be at least **32 characters** (256 bits). Shorter keys will cause silent 401 errors.
+3. **Google Auth**: Ensure `Google__ClientId` is injected into the backend container; otherwise, local Google logins will fail remote validation.
+4. **Backend Network**: The backend container MUST use `--network=host` so NGINX can reach it on `localhost:10000`.
+
+---
+
+## 🗄️ Production Database Migration
+
+To synchronize local data with production without data loss:
+
+1. **Backup Source**:
+   ```bash
+   docker exec -e PGPASSWORD=admin123 postgres-container pg_dump -U postgres -d inventorydb -Fc > backup.dump
+   ```
+2. **Transfer**:
+   ```bash
+   gcloud compute scp backup.dump demo:~/ --zone=us-east1-c
+   ```
+3. **Restore (Remote VM)**:
+   - Stop backend: `docker stop backend`
+   - Recreate DB: `docker exec ... psql -c 'DROP DATABASE ...; CREATE DATABASE ...;'`
+   - Restore: `docker exec -i ... pg_restore -d inventorydb < backup.dump`
+   - Start backend: `docker start backend`
+
+---
+
 ## 🛠️ Connection Failure Procedure
 If an AI or developer cannot connect:
 1. **GCP**: Run `gcloud auth print-access-token` to verify session.

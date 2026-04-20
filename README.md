@@ -69,4 +69,12 @@ If you are an AI working on this project, you **MUST** follow this order to unde
 **NOTICE TO AI**: You have authenticated CLIs (`gcloud`, `gh`, `neonctl`). Be proactive. If something doesn't work, fix it using the available tools. Do not ask the user to do what you can execute.
 
 ---
+## 🚀 Production Deployment
+
+For deploying the platform to **Google Cloud (launch.lat)**, refer to the following documentation:
+
+- **Deployment Guide**: [infra/DEPLOYMENT_GUIDE.md](infra/DEPLOYMENT_GUIDE.md) — Step-by-step instructions for build and deploy.
+- **Infrastructure SOP**: [infra/INFRASTRUCTURE_SOP.md](infra/INFRASTRUCTURE_SOP.md) — Pre-flight checks and Database migration procedures.
+
+---
 Designed and developed with high quality and maintainability standards.
