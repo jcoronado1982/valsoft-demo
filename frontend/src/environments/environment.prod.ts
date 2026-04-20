@@ -1,10 +1,10 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.tu-dominio-produccion.com/api',
+  apiUrl: '/api',
   otel: {
     serviceName: 'frontend-angular',
     propagateTraceHeaderCorsUrls: [
-      'https://api.tu-dominio-produccion.com'
+      'https://launch.lat'
     ]
   }
 };

@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private ngZone: NgZone,
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
         next: () => this.loading.set(false),
         error: () => {
           this.loading.set(false);
-          this.error.set("No se pudo conectar con el servidor. ¿Hiciste 'make dev'?");
+          this.error.set("No se pudo conectar con el servidor.");
         },
       });
     });
