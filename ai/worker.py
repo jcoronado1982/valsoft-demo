@@ -242,7 +242,7 @@ def serve():
     port = os.environ.get('PORT', '50051')
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     ai_service_pb2_grpc.add_AIServiceServicer_to_server(AIServiceServicer(), server)
-    server.add_insecure_port(f'[::]:{port}')
+    server.add_insecure_port(f'0.0.0.0:{port}')
     
     print("=" * 60)
     print(f"🚀 AI Worker starting on port {port}...")

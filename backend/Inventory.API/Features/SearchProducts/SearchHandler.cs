@@ -15,7 +15,7 @@ namespace Inventory.API.Features.SearchProducts;
 public record PagedResponse<T>(List<T> Items, int TotalCount, List<DynamicFilterDto>? Facets = null);
 
 // 1. LIGHT DTO: To avoid returning the full entity over the network
-public record ProductSearchDto(int Id, string Name, decimal Price, int Quantity, string? CategoryName, string Status, string? Brand);
+public record ProductSearchDto(int Id, string Name, decimal Price, int Quantity, string? CategoryName, int? CategoryId, string Status, string? Brand);
 
 // 2. EXTENDED QUERY: Supports extra filters and pagination
 public record SearchProductsQuery(
@@ -137,6 +137,7 @@ public class SearchProductsHandler(InventoryDbContext context) : IRequestHandler
                 p.Price,
                 p.Quantity,
                 CategoryName = p.Category != null ? p.Category.Name : null,
+                p.CategoryId,
                 p.Status,
                 p.DynamicAttributes
             })
@@ -155,7 +156,7 @@ public class SearchProductsHandler(InventoryDbContext context) : IRequestHandler
                      }
                  }
              }
-            return new ProductSearchDto(p.Id, p.Name, p.Price, p.Quantity, p.CategoryName, p.Status, brand);
+            return new ProductSearchDto(p.Id, p.Name, p.Price, p.Quantity, p.CategoryName, p.CategoryId, p.Status, brand);
         }).ToList();
 
         return new PagedResponse<ProductSearchDto>(items, totalCount, facets);

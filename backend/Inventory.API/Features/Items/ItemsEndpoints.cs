@@ -37,7 +37,7 @@ public static class ItemsEndpoints
 
 // --- Queries & Commands ---
 
-public record UpdateItemCommand(int Id, string? Name, decimal? Price, int? Quantity, string? Status) : IRequest<Product?>;
+public record UpdateItemCommand(int Id, string? Name, decimal? Price, int? Quantity, string? Status, int? CategoryId) : IRequest<Product?>;
 
 public record DeleteItemCommand(int Id) : IRequest<bool>;
 
@@ -55,6 +55,7 @@ public class UpdateItemHandler(InventoryDbContext context) : IRequestHandler<Upd
         if (request.Price.HasValue) product.Price = request.Price.Value;
         if (request.Quantity.HasValue) product.Quantity = request.Quantity.Value;
         if (request.Status != null) product.Status = request.Status;
+        if (request.CategoryId.HasValue) product.CategoryId = request.CategoryId.Value;
 
         await context.SaveChangesAsync(cancellationToken);
         return product;

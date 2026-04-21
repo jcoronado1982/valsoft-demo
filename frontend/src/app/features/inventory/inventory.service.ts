@@ -118,7 +118,9 @@ export class InventoryService {
   async deleteItem(id: string) {
     try {
       await firstValueFrom(this.http.delete(`${this.apiUrl}/${id}`));
-      this._items.update(items => items.filter(item => item.id !== id));
+      // Refresh both full list (to handle pagination) and sidebar filters
+      await this.loadItems(this.searchTerm(), null, {}, this.currentPage(), this.pageSize());
+      await this.loadFilters();
     } catch (error) {
       console.error('Error deleting item', error);
     }
@@ -132,7 +134,8 @@ export class InventoryService {
         quantity: updates.stock ?? updates.quantity
       };
       const updated = await firstValueFrom(this.http.patch<any>(`${this.apiUrl}/${id}`, backendUpdates));
-      this.loadItems();
+      await this.loadItems(this.searchTerm(), null, {}, this.currentPage(), this.pageSize());
+      await this.loadFilters();
       return updated;
     } catch (error) {
       console.error('Error updating item', error);

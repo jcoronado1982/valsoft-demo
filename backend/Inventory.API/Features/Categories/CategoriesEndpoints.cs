@@ -37,6 +37,7 @@ public class GetFiltersHandler(InventoryDbContext context) : IRequestHandler<Get
     public async Task<FiltersResponse> Handle(GetFiltersQuery request, CancellationToken cancellationToken)
     {
         var categories = await context.Categories
+            .Where(c => c.Products.Any())
             .OrderBy(c => c.Name)
             .Select(c => new CategoryDto(
                 c.Id, 

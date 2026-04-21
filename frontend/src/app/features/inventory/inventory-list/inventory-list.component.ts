@@ -75,14 +75,16 @@ export class InventoryListComponent implements OnInit {
     name: '',
     price: 0,
     stock: 0,
-    status: 'In Stock' as 'In Stock' | 'Low Stock' | 'Ordered' | 'Discontinued'
+    status: 'In Stock' as 'In Stock' | 'Low Stock' | 'Ordered' | 'Discontinued',
+    categoryId: null as number | null
   };
 
   editForm = {
     name: '',
     price: 0,
     stock: 0,
-    status: 'In Stock' as 'In Stock' | 'Low Stock' | 'Ordered' | 'Discontinued'
+    status: 'In Stock' as 'In Stock' | 'Low Stock' | 'Ordered' | 'Discontinued',
+    categoryId: null as number | null
   };
 
   constructor() {}
@@ -225,7 +227,8 @@ export class InventoryListComponent implements OnInit {
       name: item.name,
       price: item.price || 0,
       stock: item.stock,
-      status: item.status as 'In Stock' | 'Low Stock' | 'Ordered' | 'Discontinued'
+      status: item.status as 'In Stock' | 'Low Stock' | 'Ordered' | 'Discontinued',
+      categoryId: item.categoryId ? parseInt(item.categoryId) : null
     };
   }
 
@@ -241,7 +244,8 @@ export class InventoryListComponent implements OnInit {
           name: this.editForm.name,
           price: this.editForm.price,
           stock: this.editForm.stock,
-          status: this.editForm.status
+          status: this.editForm.status,
+          categoryId: this.editForm.categoryId
         });
         this.editingItem.set(null);
       } catch (error) {
@@ -259,7 +263,8 @@ export class InventoryListComponent implements OnInit {
       name: '',
       price: 0,
       stock: 0,
-      status: 'In Stock'
+      status: 'In Stock',
+      categoryId: null
     };
     this.errorMessage.set(null);
     this.isProcessing.set(false);
@@ -283,7 +288,8 @@ export class InventoryListComponent implements OnInit {
           name: item.name,
           price: item.price,
           stock: item.stock,
-          status: item.status
+          status: item.status,
+          categoryId: item.categoryId
         });
         this.isAdding.set(false);
       } catch (error: any) {
